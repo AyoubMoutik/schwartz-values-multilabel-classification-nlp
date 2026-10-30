@@ -1,0 +1,8 @@
+date,modele,pretraitement,graine,macro_f1_val,macro_f1_test,micro_f1_val,micro_f1_test,temps_entrainement_s,params_entraines,notes
+2026-10-30T20:17:32,trivial_toutes_valeurs,aucun,0,0.27177163823134165,0.248426345171629,0.28722419205492444,0.2629302030806536,0,0,
+2026-10-30T20:17:32,trivial_aucune_valeur,aucun,0,0.0,0.0,0.0,0.0,0,0,
+2026-10-30T20:18:03,baseline_tfidf_lr,"texte complet, minuscules",0,0.3941142446636842,,0.4716809116809117,,2.5,,"C=1, seuil unique 0.39"
+2026-10-30T20:18:03,baseline_tfidf_lr,"texte complet, minuscules",0,0.4085048720395819,,0.449812861517523,,2.5,,"C=1, seuil par valeur (score val optimiste)"
+2026-10-30T20:18:38,baseline_tfidf_lr,conclusion + position + prémisse,0,0.3941142446636842,,0.4716809116809117,,,,"ablation entrée, C=1, seuil 0.39"
+2026-10-30T20:18:41,baseline_tfidf_lr,position + prémisse,0,0.40022759784885037,,0.4770992366412214,,,,"ablation entrée, C=1, seuil 0.39"
+2026-10-30T20:18:44,baseline_tfidf_lr,prémisse seule,0,0.4005590238501545,,0.4740918512054107,,,,"ablation entrée, C=1, seuil 0.38"

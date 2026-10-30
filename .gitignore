@@ -1,0 +1,17 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Dataset (downloaded from Zenodo, not versioned)
+data/raw/
+
+# Consignes du TP (documents de l enseignant)
+*.pdf
+*.docx

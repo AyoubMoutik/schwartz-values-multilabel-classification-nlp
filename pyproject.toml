@@ -1,0 +1,37 @@
+[project]
+name = "valeval"
+version = "0.1.0"
+description = "TP2 groupe 11 : identifier les valeurs humaines derrière un argument (Touché23-ValueEval)"
+readme = "README.md"
+authors = [
+    { name = "AyoubMoutik", email = "whoami9630@gmail.com" }
+]
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "matplotlib>=3.11.2",
+    "numpy>=2.4.6",
+    "pandas>=3.1.0",
+    "scikit-learn>=1.9.1",
+    "torch>=2.11.0",
+    "transformers>=5.22.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13.0"]
+build-backend = "uv_build"
+
+# torch is fetched from PyTorch's own index to get the GPU (CUDA 12.8) build
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.4.0",
+    "nbconvert>=7.17.2",
+    "nbformat>=5.11.1",
+]
