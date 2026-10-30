@@ -33,18 +33,24 @@ def f1_par_valeur(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
 SEUILS = np.arange(0.05, 0.96, 0.01)
 
 
-def seuil_unique(y_true: np.ndarray, probas: np.ndarray) -> float:
+def grille_quantiles(scores_val: np.ndarray) -> np.ndarray:
+    """Seuils suivant la répartition des scores : utile quand ils sont écrasés près de 0 ou de 1."""
+    return np.unique(np.quantile(scores_val, np.linspace(0.01, 0.99, 99)))
+
+
+def seuil_unique(y_true: np.ndarray, probas: np.ndarray, grille=SEUILS) -> float:
     """Le seuil, commun aux 20 valeurs, qui maximise le macro-F1."""
-    f1s = [f1_score(y_true, probas >= s, average="macro", zero_division=0) for s in SEUILS]
-    return float(SEUILS[int(np.argmax(f1s))])
+    f1s = [f1_score(y_true, probas >= s, average="macro", zero_division=0) for s in grille]
+    return float(grille[int(np.argmax(f1s))])
 
 
-def seuils_par_valeur(y_true: np.ndarray, probas: np.ndarray) -> np.ndarray:
+def seuils_par_valeur(y_true: np.ndarray, probas: np.ndarray, quantiles: bool = False) -> np.ndarray:
     """Un seuil par valeur : chacun maximise le F1 de sa valeur."""
     res = np.zeros(y_true.shape[1])
     for j in range(y_true.shape[1]):
-        f1s = [f1_score(y_true[:, j], probas[:, j] >= s, zero_division=0) for s in SEUILS]
-        res[j] = SEUILS[int(np.argmax(f1s))]
+        grille = grille_quantiles(probas[:, j]) if quantiles else SEUILS
+        f1s = [f1_score(y_true[:, j], probas[:, j] >= s, zero_division=0) for s in grille]
+        res[j] = grille[int(np.argmax(f1s))]
     return res
 
 

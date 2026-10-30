@@ -6,3 +6,15 @@ date,modele,pretraitement,graine,macro_f1_val,macro_f1_test,micro_f1_val,micro_f
 2026-10-30T20:18:38,baseline_tfidf_lr,conclusion + position + prémisse,0,0.3941142446636842,,0.4716809116809117,,,,"ablation entrée, C=1, seuil 0.39"
 2026-10-30T20:18:41,baseline_tfidf_lr,position + prémisse,0,0.40022759784885037,,0.4770992366412214,,,,"ablation entrée, C=1, seuil 0.39"
 2026-10-30T20:18:44,baseline_tfidf_lr,prémisse seule,0,0.4005590238501545,,0.4740918512054107,,,,"ablation entrée, C=1, seuil 0.38"
+2026-10-30T22:08:13,B1_zeroshot_mdeberta,hypothèses en,0,0.285246712075359,,0.2979395959654013,,0,0,"seuil unique 0.0135, croisé par valeur 0.318"
+2026-10-30T22:08:25,B1_zeroshot_mdeberta,hypothèses fr,0,0.27199057333665844,,0.28797922503929474,,0,0,"seuil unique 0.0003, croisé par valeur 0.314"
+2026-10-30T22:08:38,B1_zeroshot_mdeberta,hypothèses reformulation,0,0.27756448681312784,,0.2912303664921466,,0,0,"seuil unique 0.0061, croisé par valeur 0.306"
+2026-10-30T22:08:50,B1_zeroshot_bart,hypothèses en,0,0.3391773050139755,,0.37880032867707475,,0,0,"seuil unique 0.1876, croisé par valeur 0.364"
+2026-10-30T22:09:02,B1_zeroshot_bart,hypothèses fr,0,0.3119424731435208,,0.3372093023255814,,0,0,"seuil unique 0.4810, croisé par valeur 0.325"
+2026-10-30T22:09:14,B1_zeroshot_bart,hypothèses reformulation,0,0.3116863687706451,,0.3140242486180146,,0,0,"seuil unique 0.3009, croisé par valeur 0.348"
+2026-10-30T22:09:27,B1_zeroshot_deberta_large,hypothèses en,0,0.39078848747503625,,0.4246199117214321,,0,0,"seuil unique 0.0007, croisé par valeur 0.407"
+2026-10-30T22:09:39,B1_zeroshot_deberta_large,hypothèses fr,0,0.37316531228042693,,0.41242221710071447,,0,0,"seuil unique 0.0038, croisé par valeur 0.405"
+2026-10-30T22:09:51,B1_zeroshot_deberta_large,hypothèses reformulation,0,0.3552235264898217,,0.36063363667003706,,0,0,"seuil unique 0.0066, croisé par valeur 0.398"
+2026-10-30T22:37:23,B2_dictionnaire_train,mots-clés,0,0.3343018204001368,,0.3804562975309928,,0,0,
+2026-10-30T22:37:23,B2_dictionnaire_train_sans_sujets,mots-clés,0,0.2954187562386586,,0.3328968046097433,,0,0,
+2026-10-30T22:37:23,B2_dictionnaire_descriptions,mots-clés,0,0.18704550067621198,,0.22906581522298897,,0,0,

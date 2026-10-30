@@ -15,3 +15,6 @@ data/raw/
 # Consignes du TP (documents de l enseignant)
 *.pdf
 *.docx
+
+# Scores intermédiaires recalculables
+cache/
