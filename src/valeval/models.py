@@ -16,6 +16,17 @@ def couche_embedding(n_mots: int, dim: int, vecteurs=None, gele: bool = False) -
     return nn.Embedding.from_pretrained(torch.as_tensor(vecteurs), freeze=gele, padding_idx=0)
 
 
+class Etats(nn.Module):
+    """Remplace l'embedding quand l'entrée est déjà une suite de vecteurs (Partie D2)."""
+
+    def __init__(self, dim: int):
+        super().__init__()
+        self.embedding_dim = dim
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return x
+
+
 class BiLSTM(nn.Module):
     """C1 : lit le texte dans les deux sens, puis résume la séquence en un vecteur."""
 

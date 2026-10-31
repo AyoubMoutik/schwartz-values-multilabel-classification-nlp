@@ -34,10 +34,22 @@ def lots(ids: list, y: np.ndarray, taille: int, melanger: bool, tirage=None):
         yield x.cuda(), x.cuda() != 0, torch.as_tensor(y[choix], dtype=torch.float32).cuda()
 
 
+def lots_etats(donnees: tuple, y: np.ndarray, taille: int, melanger: bool, tirage=None):
+    """Comme lots, pour des états déjà calculés : donnees = (états (n, L, dim), masques (n, L))."""
+    etats, masques = donnees
+    ordre = np.random.permutation(len(y)) if melanger else np.arange(len(y))
+    for i in range(0, len(ordre), taille):
+        choix = torch.as_tensor(ordre[i:i + taille])
+        m = masques[choix]
+        n = int(m.sum(1).max())
+        yield (etats[choix][:, :n].float().cuda(), m[:, :n].cuda(),
+               torch.as_tensor(y[choix.numpy()], dtype=torch.float32).cuda())
+
+
 @torch.inference_mode()
-def predire_probas(modele, ids: list, y: np.ndarray, taille: int = 256) -> np.ndarray:
+def predire_probas(modele, ids, y: np.ndarray, taille: int = 256, fabrique=lots) -> np.ndarray:
     modele.eval()
-    return np.concatenate([modele(x, m).sigmoid().float().cpu().numpy() for x, m, _ in lots(ids, y, taille, False)])
+    return np.concatenate([modele(x, m).sigmoid().float().cpu().numpy() for x, m, _ in fabrique(ids, y, taille, False)])
 
 
 def poids_positifs(y_tr: np.ndarray) -> torch.Tensor:
@@ -58,7 +70,7 @@ def nb_parametres(modele) -> int:
 
 
 def entrainer(modele, ids_tr, y_tr, ids_va, y_va, epoques=30, patience=5, lr=1e-3,
-              taille=32, pos_weight=None, tirage=None) -> dict:
+              taille=32, pos_weight=None, tirage=None, fabrique=lots) -> dict:
     """Entraîne, garde l'époque au meilleur macro-F1 sur val, s'arrête après patience époques sans progrès."""
     modele.cuda()
     perte_fn = nn.BCEWithLogitsLoss(pos_weight=pos_weight)
@@ -68,14 +80,14 @@ def entrainer(modele, ids_tr, y_tr, ids_va, y_va, epoques=30, patience=5, lr=1e-
     for epoque in range(1, epoques + 1):
         modele.train()
         total, n = 0.0, 0
-        for x, m, y in lots(ids_tr, y_tr, taille, True, tirage):
+        for x, m, y in fabrique(ids_tr, y_tr, taille, True, tirage):
             optimiseur.zero_grad()
             perte = perte_fn(modele(x, m), y)      # 1. erreur sur ce lot
             perte.backward()                       # 2. rôle de chaque paramètre dans l'erreur
             nn.utils.clip_grad_norm_(modele.parameters(), 1.0)
             optimiseur.step()                      # 3. petite correction des paramètres
             total, n = total + perte.item() * len(y), n + len(y)
-        p_va = predire_probas(modele, ids_va, y_va)
+        p_va = predire_probas(modele, ids_va, y_va, fabrique=fabrique)
         perte_va = float(perte_fn(torch.as_tensor(np.log(np.clip(p_va, 1e-6, 1 - 1e-6) / (1 - np.clip(p_va, 1e-6, 1 - 1e-6)))).cuda(),
                                   torch.as_tensor(y_va, dtype=torch.float32).cuda()))
         s = seuil_unique(y_va, p_va, GRILLE_RAPIDE)
@@ -89,4 +101,4 @@ def entrainer(modele, ids_tr, y_tr, ids_va, y_va, epoques=30, patience=5, lr=1e-
                 break
     modele.load_state_dict(etat)
     return {"courbes": courbes, "macro_f1_val": meilleur, "temps_s": time.time() - debut,
-            "params": nb_parametres(modele), "probas_val": predire_probas(modele, ids_va, y_va)}
+            "params": nb_parametres(modele), "probas_val": predire_probas(modele, ids_va, y_va, fabrique=fabrique)}
