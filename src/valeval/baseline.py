@@ -18,7 +18,7 @@ class TfidfLR:
         self.cars = TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 5), min_df=2,
                                     sublinear_tf=True, lowercase=lowercase)
         self.clf = OneVsRestClassifier(
-            LogisticRegression(C=C, class_weight="balanced", max_iter=1000), n_jobs=-1)
+            LogisticRegression(C=C, class_weight="balanced", max_iter=1000))
 
     def fit(self, textes, y):
         # le vocabulaire et les poids IDF sont appris sur le train uniquement

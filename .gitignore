@@ -18,3 +18,6 @@ data/raw/
 
 # Scores intermédiaires recalculables
 cache/
+
+# Fichiers ajoutés par Windows / Google Drive
+desktop.ini
