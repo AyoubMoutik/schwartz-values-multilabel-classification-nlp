@@ -21,3 +21,7 @@ cache/
 
 # Fichiers ajoutés par Windows / Google Drive
 desktop.ini
+
+# Le compte-rendu, lui, est versionné
+!rapport/*.docx
+!rapport/*.pdf
